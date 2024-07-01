@@ -1,4 +1,5 @@
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
+import { EmailEncoding } from 'aws-cdk-lib/aws-ses-actions';
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -12,6 +13,17 @@ const schema = a.schema({
       content: a.string(),
     })
     .authorization((allow) => [allow.guest()]),
+  User: a
+    .model({
+      name: a.string(),
+      email: a
+        .string(),
+    })
+    .authorization((allow) => [
+      allow.groups(['admin']),
+      allow.authenticated(),
+      allow.guest(),
+    ]) ,
 });
 
 export type Schema = ClientSchema<typeof schema>;
